@@ -185,11 +185,12 @@
             border-radius: 50%;
             outline: none;
             cursor: pointer;
-            transition: background-color 0.3s, border-color 0.3s;
+            transition: background-color 0.3s, border-color 0.3s, transform 0.3s;
         }
         .circle-checkbox:checked {
             background-color: #3182ce; /* Matching blue */
             border-color: #3182ce;
+            transform: scale(0.8); /* Reduce size when checked */
         }
         @media (max-width: 600px) {
             body {
@@ -295,7 +296,7 @@
                     const completedTime = new Date();
                     const timeTaken = Math.abs(completedTime - createdTime) / 1000; // time taken in seconds
                     const timeTakenString = `Completed in ${Math.floor(timeTaken / 60)} minutes and ${Math.floor(timeTaken % 60)} seconds`;
-                    timestampElement.textContent = `${completedTime.toLocaleString()} (${timeTakenString})`;
+                    timestampElement.textContent = `${completedTime.toLocaleString()}${window.innerWidth > 600 ? ` (${timeTakenString})` : ''}`;
                 } else {
                     timestampElement.textContent = timestampElement.getAttribute('data-created');
                 }
