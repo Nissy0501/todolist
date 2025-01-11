@@ -1,0 +1,319 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern To-Do List</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #90cdf4; /* Lighter blue background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            transition: background-color 0.3s;
+            position: relative;
+        }
+        .background-heading {
+            position: absolute;
+            top: 50px; /* Adjusted to move down */
+            width: 100%;
+            text-align: center;
+            font-family: 'Great Vibes', cursive; /* Fancy cursive font */
+            font-size: 50px; /* Bigger font size */
+            color: rgba(0, 0, 0, 0.1); /* Light black text for background */
+            z-index: -1;
+        }
+        .container {
+            background: #e0f7fa; /* Light blue background */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            width: 90%;
+            max-width: 400px;
+            padding: 20px;
+            transition: background-color 0.3s, color 0.3s, transform 0.3s;
+            z-index: 1;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0;
+            color: #000; /* Black text */
+            transition: color 0.3s;
+        }
+        .header .theme-toggle {
+            cursor: pointer;
+            font-size: 20px;
+            color: #000; /* Black icon */
+            transition: color 0.3s;
+        }
+        .input-group {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .input-group input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #90cdf4; /* Lighter blue border */
+            border-radius: 4px 0 0 4px;
+            outline: none;
+            transition: background-color 0.3s, color 0.3s;
+            color: #000; /* Black text */
+            font-style: italic; /* Fancy text style */
+        }
+        .input-group button {
+            padding: 10px 20px;
+            border: none;
+            background: linear-gradient(45deg, #3182ce, #2b6cb0); /* Matching blue gradient */
+            color: #fff;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            font-weight: 700;
+        }
+        .input-group button:hover {
+            background: linear-gradient(45deg, #2b6cb0, #3182ce);
+            transform: scale(1.05);
+        }
+        .todo-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .todo-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #90cdf4; /* Lighter blue border */
+            transition: background-color 0.3s, color 0.3s;
+            font-family: 'Roboto', sans-serif;
+            font-size: 16px;
+            font-weight: 500;
+            color: #1a202c; /* Darker text color for better contrast */
+        }
+        .todo-item:last-child {
+            border-bottom: none;
+        }
+        .todo-item .text {
+            flex: 1;
+            margin: 0 10px;
+            color: #1a202c; /* Darker text color for better contrast */
+            transition: color 0.3s;
+            font-style: italic; /* Fancy text style */
+        }
+        .todo-item .timestamp {
+            font-size: 12px;
+            color: #888;
+            margin-left: 10px;
+        }
+        .todo-item .actions {
+            display: flex;
+            align-items: center;
+        }
+        .todo-item .actions .edit,
+        .todo-item .actions .delete {
+            cursor: pointer;
+            margin-left: 10px;
+            color: #3182ce; /* Matching blue */
+            transition: color 0.3s;
+        }
+        .todo-item .actions .edit:hover,
+        .todo-item .actions .delete:hover {
+            color: #2b6cb0;
+        }
+        .todo-item.completed .text {
+            text-decoration: line-through;
+            color: #888;
+        }
+        .dark-theme {
+            background-color: #2c3e50;
+        }
+        .dark-theme .container {
+            background-color: #34495e;
+            color: #ecf0f1;
+        }
+        .dark-theme .header h1 {
+            color: #ecf0f1; /* White text */
+        }
+        .dark-theme .theme-toggle {
+            color: #ecf0f1; /* White icon */
+        }
+        .dark-theme .input-group input {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            border: 1px solid #34495e;
+        }
+        .dark-theme .input-group button {
+            background: linear-gradient(45deg, #2980b9, #1c598a);
+        }
+        .dark-theme .input-group button:hover {
+            background: linear-gradient(45deg, #1c598a, #2980b9);
+        }
+        .dark-theme .todo-item {
+            border-bottom: 1px solid #34495e;
+        }
+        .dark-theme .todo-item .text {
+            color: #ecf0f1; /* White text */
+        }
+        .dark-theme .todo-item .timestamp {
+            color: #bdc3c7; /* Light grey text */
+        }
+        .dark-theme .todo-item .actions .edit,
+        .dark-theme .todo-item .actions .delete {
+            color: #ecf0f1;
+        }
+        .dark-theme .todo-item .actions .edit:hover,
+        .dark-theme .todo-item .actions .delete:hover {
+            color: #bdc3c7;
+        }
+        .circle-checkbox {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #3182ce; /* Matching blue */
+            border-radius: 50%;
+            outline: none;
+            cursor: pointer;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        .circle-checkbox:checked {
+            background-color: #3182ce; /* Matching blue */
+            border-color: #3182ce;
+        }
+        @media (max-width: 600px) {
+            body {
+                justify-content: center;
+                align-items: flex-start;
+                padding: 0;
+            }
+            .container {
+                width: 90%;
+                max-width: 350px;
+                border-radius: 8px;
+                padding: 20px;
+                margin-top: 200px; /* Move down to below the center */
+                transform: translateY(0);
+            }
+            .header h1 {
+                font-size: 20px;
+            }
+            .input-group input {
+                font-size: 14px;
+            }
+            .input-group button {
+                font-size: 14px;
+                padding: 10px;
+            }
+            .todo-item {
+                font-size: 14px;
+                padding: 8px;
+            }
+            .todo-item .text {
+                margin: 0 5px;
+            }
+            .todo-item .timestamp {
+                font-size: 10px;
+            }
+            .todo-item .actions .edit,
+            .todo-item .actions .delete {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-heading">Havila's To-Do List</div>
+    <div class="container">
+        <div class="header">
+            <h1>To-Do List</h1>
+            <div class="theme-toggle">
+                <i class="fas fa-moon"></i>
+            </div>
+        </div>
+        <div class="input-group">
+            <input type="text" id="new-task" placeholder="Add a new task...">
+            <button id="add-task">Add</button>
+        </div>
+        <ul class="todo-list" id="todo-list">
+            <!-- No default tasks -->
+        </ul>
+    </div>
+
+    <script>
+        function addTask() {
+            const taskText = document.getElementById('new-task').value;
+            if (taskText.trim() !== '') {
+                const timestamp = new Date().toLocaleString();
+                const newTask = document.createElement('li');
+                newTask.classList.add('todo-item');
+                newTask.innerHTML = `
+                    <input type="checkbox" class="circle-checkbox toggle">
+                    <p class="text">${taskText}</p>
+                    <span class="timestamp" data-created="${timestamp}">${timestamp}</span>
+                    <div class="actions">
+                        <i class="fas fa-edit edit"></i>
+                        <i class="fas fa-trash delete"></i>
+                    </div>
+                `;
+                document.getElementById('todo-list').appendChild(newTask);
+                document.getElementById('new-task').value = '';
+            }
+        }
+
+        document.getElementById('add-task').addEventListener('click', addTask);
+
+        document.getElementById('new-task').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addTask();
+            }
+        });
+
+        document.getElementById('todo-list').addEventListener('click', function(e) {
+            if (e.target.classList.contains('delete')) {
+                e.target.parentElement.parentElement.remove();
+            } else if (e.target.classList.contains('edit')) {
+                const taskText = e.target.parentElement.previousElementSibling.previousElementSibling;
+                const newText = prompt('Edit task:', taskText.textContent);
+                if (newText !== null) {
+                    taskText.textContent = newText;
+                }
+            } else if (e.target.classList.contains('toggle')) {
+                const timestampElement = e.target.nextElementSibling.nextElementSibling;
+                const createdTime = new Date(timestampElement.getAttribute('data-created'));
+                if (e.target.checked) {
+                    const completedTime = new Date();
+                    const timeTaken = Math.abs(completedTime - createdTime) / 1000; // time taken in seconds
+                    const timeTakenString = `Completed in ${Math.floor(timeTaken / 60)} minutes and ${Math.floor(timeTaken % 60)} seconds`;
+                    timestampElement.textContent = `${completedTime.toLocaleString()} (${timeTakenString})`;
+                } else {
+                    timestampElement.textContent = timestampElement.getAttribute('data-created');
+                }
+                e.target.parentElement.classList.toggle('completed');
+            }
+        });
+
+        document.querySelector('.theme-toggle').addEventListener('click', function() {
+            document.body.classList.toggle('dark-theme');
+            const icon = this.querySelector('i');
+            if (document.body.classList.contains('dark-theme')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        });
+    </script>
+</body>
+</html>
